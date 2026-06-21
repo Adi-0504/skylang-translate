@@ -7,21 +7,20 @@ function convert(input){
     };
   }
 
-  const chars = input.replace(/\s+/g, "").split("");
+  const clean = input.replace(/\s+/g, "");
+
+  const chars = clean.split("");
 
   let glyphs = [];
-  let phonetic = [];
 
   for(let c of chars){
-
-    const g = glyphMap[c] || c;
-
-    glyphs.push(g);
-    phonetic.push(c);
+    glyphs.push(glyphMap[c] || c);
   }
+
+  const syllables = syllabify(clean);
 
   return {
     glyph: glyphs.join(""),
-    phonetic: phonetic.join(" ")
+    phonetic: syllables.join(" ")
   };
 }

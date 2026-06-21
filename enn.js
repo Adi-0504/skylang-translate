@@ -1,22 +1,30 @@
-<<<<<<< HEAD
-function scoreSyllable(syllable){
+function ENN(){
 
-  let score = 0;
+  return {
+    evaluate: function(syllable){
 
-  if(syllable.includes("a")) score += 1;
-  if(syllable.includes("t")) score += 1;
-  if(syllable.includes("m")) score += 1;
+      if(!syllable || typeof syllable !== "string"){
+        return 0;
+      }
 
-  return score / 3;
-=======
-function scoreSyllable(syllable){
+      let score = 0;
 
-  let score = 0;
+      const vowels = ["a", "e", "i", "o", "u"];
+      const consonants = ["t", "m", "n", "w", "r"];
 
-  if(syllable.includes("a")) score += 1;
-  if(syllable.includes("t")) score += 1;
-  if(syllable.includes("m")) score += 1;
+      for(let v of vowels){
+        if(syllable.includes(v)) score += 0.2;
+      }
 
-  return score / 3;
->>>>>>> be29b5d36a7a3799c3ce96a645aaa06373de72f4
+      for(let c of consonants){
+        if(syllable.includes(c)) score += 0.1;
+      }
+
+      if(syllable.length === 2) score += 0.2;
+
+      if(score > 1) score = 1;
+
+      return score;
+    }
+  };
 }

@@ -19,5 +19,9 @@ function speak(){
 
   const u = new SpeechSynthesisUtterance(phoneticBuffer);
 
+  u.lang = "en-US";
+  u.rate = 1;
+  u.pitch = 1;
+
   speechSynthesis.speak(u);
 }
