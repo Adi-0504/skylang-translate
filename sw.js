@@ -1,4 +1,4 @@
-const CACHE_NAME = "skylang-v1";
+const CACHE_NAME = "skylang-v5-ui";
 
 const FILES = [
   "./",
@@ -11,17 +11,35 @@ const FILES = [
   "./glyphMap.js",
   "./i18n.js",
   "./tts.js",
-  "./enn.js"
+  "./enn.js",
+  "./manifest.json",
+  "./icon/icon.png"
 ];
 
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES))
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(FILES))
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("fetch", e => {
-  e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", event => {
+  if(event.request.method !== "GET") return;
+
+  event.respondWith(
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
 });
